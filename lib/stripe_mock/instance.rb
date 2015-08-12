@@ -63,6 +63,16 @@ module StripeMock
 
     def mock_request(method, url, api_key, params={}, headers={}, api_base_url=nil)
       return {} if method == :xtest
+      
+      params.keys.each do |key|
+        if params[key].try(:has_key?, :data) && params[key][:data].try(:has_key?, 0)
+          if params[key][:data].keys.count == 1
+            params.delete(key)
+          else
+            params[key][:data].delete(0)
+          end
+        end
+      end
 
       api_key ||= Stripe.api_key
 
