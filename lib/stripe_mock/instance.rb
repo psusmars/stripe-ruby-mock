@@ -65,11 +65,12 @@ module StripeMock
       return {} if method == :xtest
       
       params.keys.each do |key|
-        if params[key].try(:has_key?, :data) && params[key][:data].try(:has_key?, 0)
+        if params[key].try(:has_key?, :data) && (params[key][:data].try(:has_key?, 0) || params[key][:data].try(:has_key?, 1))
           if params[key][:data].keys.count == 1
             params.delete(key)
           else
             params[key][:data].delete(0)
+            params[key][:data].delete(1)
           end
         end
       end
